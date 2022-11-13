@@ -45,7 +45,7 @@ class AuthService {
     var url = Uri.parse(Config.authURL + '/api/register');
     var headers = {
       'Content-Type': 'application/json',
-      'Accpet': 'application/json'
+      'Accept': 'application/json'
     };
     var body = jsonEncode({
       'name': name,
@@ -83,7 +83,7 @@ class AuthService {
     var url = Uri.parse(Config.authURL + '/api/user');
     var headers = {
       'Content-Type': 'application/json',
-      'Accpet': 'application/json',
+      'Accept': 'application/json',
       'Authorization': token
     };
     var body = jsonEncode({
