@@ -51,25 +51,28 @@ class _CheckoutPageState extends State<CheckoutPage> {
             SizedBox(
               width: 15,
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Flexible(
-                  child: Text(
-                    cart.product!.title ?? '',
-                    style: MyStyle.productCartTitle,
+            Container(
+              width: 90,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Flexible(
+                    child: Text(
+                      cart.product!.title ?? '',
+                      style: MyStyle.productCartTitle,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 12),
-                Row(children: [
-                  Text("\$", style: MyStyle.productPrice),
-                  Text(cart.product!.price.toString(),
-                      style: MyStyle.productPrice),
-                  const SizedBox(width: 5),
-                  // Text('Rp.65.000', style: MyStyle.productPriceDiscount)
-                ])
-              ],
+                  const SizedBox(height: 12),
+                  Row(children: [
+                    Text("\$", style: MyStyle.productPrice),
+                    Text(cart.product!.price.toString(),
+                        style: MyStyle.productPrice),
+                    const SizedBox(width: 5),
+                    // Text('Rp.65.000', style: MyStyle.productPriceDiscount)
+                  ])
+                ],
+              ),
             ),
             Expanded(
                 child: Column(
@@ -138,222 +141,227 @@ class _CheckoutPageState extends State<CheckoutPage> {
             style: MyStyle.pageTitle.copyWith(color: Colors.black),
           ),
         ),
-        body: Container(
-          color: MyColors.white,
-          padding: const EdgeInsets.all(35),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Container(
+              color: MyColors.white,
+              padding: const EdgeInsets.all(20),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFEFEFEF),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    padding: const EdgeInsets.all(13),
-                    child: Row(children: [
-                      Image.asset('assets/images/icons/basket.png'),
-                      const SizedBox(width: 7),
-                      Flexible(
-                        child: Text(
-                          'Ini halaman terakhir dari proses belanjaanmu',
-                          style: MyStyle.regularText.copyWith(
-                            fontSize: MyFontSize.text_12,
+                  Column(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFEFEFEF),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        padding: const EdgeInsets.all(13),
+                        child: Row(children: [
+                          Image.asset('assets/images/icons/basket.png'),
+                          const SizedBox(width: 7),
+                          Flexible(
+                            child: Text(
+                              'Ini halaman terakhir dari proses belanjaanmu',
+                              style: MyStyle.regularText.copyWith(
+                                fontSize: MyFontSize.text_12,
+                              ),
+                            ),
                           ),
+                        ]),
+                      ),
+                      const SizedBox(height: 14),
+                      // Product Container
+                      Container(
+                        child: ListView(
+                          physics: NeverScrollableScrollPhysics(),
+                          shrinkWrap: true,
+                          children: cartProvider.carts
+                              .map((cart) => cartCard(cart))
+                              .toList(),
                         ),
                       ),
-                    ]),
-                  ),
-                  const SizedBox(height: 14),
-                  // Product Container
-                  Container(
-                    child: ListView(
-                      physics: NeverScrollableScrollPhysics(),
-                      shrinkWrap: true,
-                      padding: EdgeInsets.symmetric(horizontal: 20),
-                      children: cartProvider.carts
-                          .map((cart) => cartCard(cart))
-                          .toList(),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  const Divider(thickness: 2),
-                  const SizedBox(height: 24),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text('Pengiriman dan pembayaran',
-                          style: MyStyle.productCartTitle)
+                      const SizedBox(height: 16),
+                      const Divider(thickness: 2),
+                      const SizedBox(height: 24),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text('Pengiriman dan pembayaran',
+                              style: MyStyle.productCartTitle)
+                        ],
+                      ),
+                      const SizedBox(height: 15),
+                      // Payment Method Container
+                      GestureDetector(
+                        onTap: () {
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) => AlertDialog(
+                              content: Container(
+                                height: 200,
+                                width: double.infinity,
+                                child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Metode Pembayaran",
+                                        style: MyStyle.paymentMethodsTitle,
+                                      ),
+                                      SizedBox(
+                                        height: 30,
+                                      ),
+                                      ListTile(
+                                        title: const Text('Ovo'),
+                                        leading: Radio<PaymentMethod>(
+                                          value: PaymentMethod.ovo,
+                                          groupValue: _payment,
+                                          onChanged: (PaymentMethod? value) {
+                                            setState(() {
+                                              _payment = value;
+                                            });
+                                            Navigator.pop(context, 'OK');
+                                          },
+                                        ),
+                                      ),
+                                      ListTile(
+                                        title: const Text('Gopay'),
+                                        leading: Radio<PaymentMethod>(
+                                          value: PaymentMethod.gopay,
+                                          groupValue: _payment,
+                                          onChanged: (PaymentMethod? value) {
+                                            setState(() {
+                                              _payment = value;
+                                            });
+                                            Navigator.pop(context, 'OK');
+                                          },
+                                        ),
+                                      ),
+                                    ]),
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.pop(context, 'Cancel'),
+                                  child: const Text('Cancel'),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 17,
+                            vertical: 12,
+                          ),
+                          decoration: BoxDecoration(
+                            boxShadow: const [
+                              BoxShadow(
+                                  color: Color.fromARGB(64, 0, 0, 0),
+                                  offset: Offset(0, 4),
+                                  blurRadius: 4,
+                                  spreadRadius: 0),
+                            ],
+                            color: MyColors.white,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              _payment != null
+                                  ? Row(
+                                      children: [
+                                        Text("Bayar Dengan "),
+                                        _payment == PaymentMethod.ovo
+                                            ? Text("OVO")
+                                            : Text("GOPAY")
+                                      ],
+                                    )
+                                  : Text(
+                                      'Pilih metode pembayaran ',
+                                      style: MyStyle.productPrice,
+                                    ),
+                              const IconButton(
+                                onPressed: null,
+                                icon: Icon(Icons.arrow_forward_ios),
+                              )
+                            ],
+                          ),
+                        ),
+                      )
                     ],
                   ),
-                  const SizedBox(height: 15),
-                  // Payment Method Container
-                  GestureDetector(
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) => AlertDialog(
-                          content: Container(
-                            height: 200,
-                            width: double.infinity,
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Metode Pembayaran",
-                                    style: MyStyle.paymentMethodsTitle,
-                                  ),
-                                  SizedBox(
-                                    height: 30,
-                                  ),
-                                  ListTile(
-                                    title: const Text('Ovo'),
-                                    leading: Radio<PaymentMethod>(
-                                      value: PaymentMethod.ovo,
-                                      groupValue: _payment,
-                                      onChanged: (PaymentMethod? value) {
-                                        setState(() {
-                                          _payment = value;
-                                        });
-                                        Navigator.pop(context, 'OK');
-                                      },
-                                    ),
-                                  ),
-                                  ListTile(
-                                    title: const Text('Gopay'),
-                                    leading: Radio<PaymentMethod>(
-                                      value: PaymentMethod.gopay,
-                                      groupValue: _payment,
-                                      onChanged: (PaymentMethod? value) {
-                                        setState(() {
-                                          _payment = value;
-                                        });
-                                        Navigator.pop(context, 'OK');
-                                      },
-                                    ),
-                                  ),
-                                ]),
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, 'Cancel'),
-                              child: const Text('Cancel'),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 17,
-                        vertical: 12,
-                      ),
-                      decoration: BoxDecoration(
-                        boxShadow: const [
-                          BoxShadow(
-                              color: Color.fromARGB(64, 0, 0, 0),
-                              offset: Offset(0, 4),
-                              blurRadius: 4,
-                              spreadRadius: 0),
-                        ],
-                        color: MyColors.white,
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          _payment != null
-                              ? Row(
-                                  children: [
-                                    Text("Bayar Dengan "),
-                                    _payment == PaymentMethod.ovo
-                                        ? Text("OVO")
-                                        : Text("GOPAY")
-                                  ],
-                                )
-                              : Text(
-                                  'Pilih metode pembayaran ',
-                                  style: MyStyle.productPrice,
-                                ),
-                          const IconButton(
-                            onPressed: null,
-                            icon: Icon(Icons.arrow_forward_ios),
-                          )
-                        ],
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              Column(
-                children: [
-                  const Divider(thickness: 1),
-                  const SizedBox(height: 16),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
+                  Column(
                     children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      const Divider(thickness: 1),
+                      const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          Text('Total Bayar', style: MyStyle.productTitle),
-                          Row(
+                          Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("\$",
-                                  style: MyStyle.productTitle.copyWith(
-                                      color: const Color(0xFFF85959))),
-                              Text(
-                                cartProvider.totalPrice().toString(),
-                                style: MyStyle.productTitle
-                                    .copyWith(color: const Color(0xFFF85959)),
-                              )
+                              Text('Total Bayar', style: MyStyle.productTitle),
+                              Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("\$",
+                                      style: MyStyle.productTitle.copyWith(
+                                          color: const Color(0xFFF85959))),
+                                  Text(
+                                    cartProvider.totalPrice().toString(),
+                                    style: MyStyle.productTitle.copyWith(
+                                        color: const Color(0xFFF85959)),
+                                  )
+                                ],
+                              ),
                             ],
                           ),
                         ],
                       ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      ElevatedButton(
-                        style: ButtonStyle(
-                          padding: MaterialStateProperty.all(
-                            const EdgeInsets.symmetric(
-                              horizontal: 24,
-                              vertical: 8,
-                            ),
-                          ),
-                          backgroundColor: MaterialStateProperty.all(
-                            MyColors.primaryOrange,
-                          ),
-                        ),
-                        onPressed: () {
-                          cartProvider.removeAll();
-                          Navigator.pushNamed(context, "/success");
-                          // showDialogWithFields(context);
-                        },
-                        child: Row(
-                          children: [
-                            Image.asset(
-                                'assets/images/icons/checkout_icon.png'),
-                            const SizedBox(width: 3),
-                            Text(
-                              'Bayar',
-                              style: MyStyle.productDetailTitle.copyWith(
-                                fontSize: MyFontSize.text_12,
-                                color: MyColors.white,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          ElevatedButton(
+                            style: ButtonStyle(
+                              padding: MaterialStateProperty.all(
+                                const EdgeInsets.symmetric(
+                                  horizontal: 24,
+                                  vertical: 8,
+                                ),
+                              ),
+                              backgroundColor: MaterialStateProperty.all(
+                                MyColors.primaryOrange,
                               ),
                             ),
-                          ],
-                        ),
-                      ),
+                            onPressed: () {
+                              cartProvider.removeAll();
+                              Navigator.pushNamed(context, "/success");
+                              // showDialogWithFields(context);
+                            },
+                            child: Row(
+                              children: [
+                                Image.asset(
+                                    'assets/images/icons/checkout_icon.png'),
+                                const SizedBox(width: 3),
+                                Text(
+                                  'Bayar',
+                                  style: MyStyle.productDetailTitle.copyWith(
+                                    fontSize: MyFontSize.text_12,
+                                    color: MyColors.white,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      )
                     ],
-                  )
+                  ),
                 ],
               ),
-            ],
+            ),
           ),
         ));
   }

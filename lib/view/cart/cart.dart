@@ -42,25 +42,28 @@ class CartPage extends StatelessWidget {
             SizedBox(
               width: 15,
             ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Flexible(
-                  child: Text(
-                    cart.product!.title ?? '',
-                    style: MyStyle.productCartTitle,
+            Container(
+              width: 90,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Flexible(
+                    child: Text(
+                      cart.product!.title ?? '',
+                      style: MyStyle.productCartTitle,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 12),
-                Row(children: [
-                  Text("\$", style: MyStyle.productPrice),
-                  Text(cart.product!.price.toString(),
-                      style: MyStyle.productPrice),
-                  const SizedBox(width: 5),
-                  // Text('Rp.65.000', style: MyStyle.productPriceDiscount)
-                ])
-              ],
+                  const SizedBox(height: 12),
+                  Row(children: [
+                    Text("\$", style: MyStyle.productPrice),
+                    Text(cart.product!.price.toString(),
+                        style: MyStyle.productPrice),
+                    const SizedBox(width: 5),
+                    // Text('Rp.65.000', style: MyStyle.productPriceDiscount)
+                  ])
+                ],
+              ),
             ),
             Expanded(
                 child: Column(
