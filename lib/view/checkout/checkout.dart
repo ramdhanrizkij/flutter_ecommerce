@@ -8,8 +8,17 @@ import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
 
-class CheckoutPage extends StatelessWidget {
+enum PaymentMethod { ovo, gopay }
+
+class CheckoutPage extends StatefulWidget {
   const CheckoutPage({super.key});
+
+  @override
+  State<CheckoutPage> createState() => _CheckoutPageState();
+}
+
+class _CheckoutPageState extends State<CheckoutPage> {
+  PaymentMethod? _payment;
 
   @override
   Widget build(BuildContext context) {
@@ -186,91 +195,50 @@ class CheckoutPage extends StatelessWidget {
                         context: context,
                         builder: (BuildContext context) => AlertDialog(
                           content: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 22,
-                              vertical: 53,
-                            ),
-                            height: 260,
+                            height: 200,
+                            width: double.infinity,
                             child: Column(
-                              children: [
-                                // List Payment Container
-                                Container(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 13),
-                                  decoration: const BoxDecoration(
-                                    border: Border(
-                                      bottom: BorderSide(width: 1),
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Metode Pembayaran",
+                                    style: MyStyle.paymentMethodsTitle,
+                                  ),
+                                  SizedBox(
+                                    height: 30,
+                                  ),
+                                  ListTile(
+                                    title: const Text('Ovo'),
+                                    leading: Radio<PaymentMethod>(
+                                      value: PaymentMethod.ovo,
+                                      groupValue: _payment,
+                                      onChanged: (PaymentMethod? value) {
+                                        setState(() {
+                                          _payment = value;
+                                        });
+                                        Navigator.pop(context, 'OK');
+                                      },
                                     ),
                                   ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Image.asset(
-                                            'assets/images/icons/dollar.png',
-                                            width: 20,
-                                          ),
-                                          const SizedBox(width: 10),
-                                          Text(
-                                            'Gopay',
-                                            style: MyStyle.paymentMethodsTitle,
-                                          ),
-                                        ],
-                                      ),
-                                      const Radio(
-                                        value: 'gopay',
-                                        groupValue: null,
-                                        onChanged: null,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  padding:
-                                      const EdgeInsets.symmetric(vertical: 13),
-                                  decoration: const BoxDecoration(
-                                    border: Border(
-                                      bottom: BorderSide(width: 1),
+                                  ListTile(
+                                    title: const Text('Gopay'),
+                                    leading: Radio<PaymentMethod>(
+                                      value: PaymentMethod.gopay,
+                                      groupValue: _payment,
+                                      onChanged: (PaymentMethod? value) {
+                                        setState(() {
+                                          _payment = value;
+                                        });
+                                        Navigator.pop(context, 'OK');
+                                      },
                                     ),
                                   ),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Image.asset(
-                                            'assets/images/icons/dollar.png',
-                                            width: 20,
-                                          ),
-                                          const SizedBox(width: 10),
-                                          Text(
-                                            'OVO',
-                                            style: MyStyle.paymentMethodsTitle,
-                                          ),
-                                        ],
-                                      ),
-                                      const Radio(
-                                        value: 'ovo',
-                                        groupValue: null,
-                                        onChanged: null,
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
+                                ]),
                           ),
                           actions: [
                             TextButton(
                               onPressed: () => Navigator.pop(context, 'Cancel'),
                               child: const Text('Cancel'),
-                            ),
-                            TextButton(
-                              onPressed: () => Navigator.pop(context, 'OK'),
-                              child: const Text('OK'),
                             ),
                           ],
                         ),
@@ -295,10 +263,19 @@ class CheckoutPage extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            'Pilih metode pembayaran ',
-                            style: MyStyle.productPrice,
-                          ),
+                          _payment != null
+                              ? Row(
+                                  children: [
+                                    Text("Bayar Dengan "),
+                                    _payment == PaymentMethod.ovo
+                                        ? Text("OVO")
+                                        : Text("GOPAY")
+                                  ],
+                                )
+                              : Text(
+                                  'Pilih metode pembayaran ',
+                                  style: MyStyle.productPrice,
+                                ),
                           const IconButton(
                             onPressed: null,
                             icon: Icon(Icons.arrow_forward_ios),
@@ -353,102 +330,8 @@ class CheckoutPage extends StatelessWidget {
                           ),
                         ),
                         onPressed: () {
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) => AlertDialog(
-                              content: Container(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 22,
-                                  vertical: 53,
-                                ),
-                                height: 260,
-                                child: Column(
-                                  children: [
-                                    // List Payment Container
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 13),
-                                      decoration: const BoxDecoration(
-                                        border: Border(
-                                          bottom: BorderSide(width: 1),
-                                        ),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Image.asset(
-                                                'assets/images/icons/dollar.png',
-                                                width: 20,
-                                              ),
-                                              const SizedBox(width: 10),
-                                              Text(
-                                                'Gopay',
-                                                style:
-                                                    MyStyle.paymentMethodsTitle,
-                                              ),
-                                            ],
-                                          ),
-                                          const Radio(
-                                            value: 'gopay',
-                                            groupValue: null,
-                                            onChanged: null,
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 13),
-                                      decoration: const BoxDecoration(
-                                        border: Border(
-                                          bottom: BorderSide(width: 1),
-                                        ),
-                                      ),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Row(
-                                            children: [
-                                              Image.asset(
-                                                'assets/images/icons/dollar.png',
-                                                width: 20,
-                                              ),
-                                              const SizedBox(width: 10),
-                                              Text(
-                                                'OVO',
-                                                style:
-                                                    MyStyle.paymentMethodsTitle,
-                                              ),
-                                            ],
-                                          ),
-                                          const Radio(
-                                            value: 'ovo',
-                                            groupValue: null,
-                                            onChanged: null,
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              actions: [
-                                TextButton(
-                                  onPressed: () =>
-                                      Navigator.pop(context, 'Cancel'),
-                                  child: const Text('Cancel'),
-                                ),
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context, 'OK'),
-                                  child: const Text('OK'),
-                                ),
-                              ],
-                            ),
-                          );
+                          cartProvider.removeAll();
+                          Navigator.pushNamed(context, "/success");
                           // showDialogWithFields(context);
                         },
                         child: Row(

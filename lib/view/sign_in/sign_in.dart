@@ -17,7 +17,7 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
   bool isLoading = false;
-  TextEditingController usernameController = TextEditingController(text: '');
+  TextEditingController emailController = TextEditingController(text: '');
 
   TextEditingController passwordController = TextEditingController(text: '');
 
@@ -29,10 +29,12 @@ class _SignInPageState extends State<SignInPage> {
       setState(() {
         isLoading = true;
       });
-
+      print(emailController.text);
+      print(passwordController.text);
       if (await authProvider.login(
-          username: usernameController.text,
-          password: passwordController.text)) {
+        email: emailController.text,
+        password: passwordController.text,
+      )) {
         Navigator.pushNamed(context, "/dashboard");
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -88,12 +90,12 @@ class _SignInPageState extends State<SignInPage> {
               ),
               const SizedBox(height: 44),
               TextField(
-                controller: usernameController,
+                controller: emailController,
                 decoration: InputDecoration(
                   border: const OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(15)),
                   ),
-                  hintText: "Username",
+                  hintText: "Email",
                   prefixIcon: const Icon(Icons.person_outline_rounded),
                   hintStyle: MyStyle.regularText,
                 ),

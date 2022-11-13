@@ -8,10 +8,12 @@ import 'package:ecommerce_faza/view/checkout/checkout.dart';
 import 'package:ecommerce_faza/view/dashboard/dashboard.dart';
 import 'package:ecommerce_faza/view/favorite/favorite_page.dart';
 import 'package:ecommerce_faza/view/product_detail/product_detail.dart';
+import 'package:ecommerce_faza/view/profile_page.dart';
 import 'package:ecommerce_faza/view/reset_password/reset_password.dart';
 import 'package:ecommerce_faza/view/sign_in/sign_in.dart';
 import 'package:ecommerce_faza/view/sign_up/sign_up.dart';
 import 'package:ecommerce_faza/view/splash_screen/splash_screen.dart';
+import 'package:ecommerce_faza/view/success_page.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -52,6 +54,8 @@ class MyApp extends StatelessWidget {
           '/cart': (context) => const CartPage(),
           '/checkout': (context) => const CheckoutPage(),
           '/favorite': (context) => const FavoritePage(),
+          '/success': (context) => const SuccessPage(),
+          '/profile': (context) => const ProfilePage(),
         },
       ),
     );

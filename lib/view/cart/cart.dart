@@ -146,30 +146,41 @@ class CartPage extends StatelessWidget {
                         .toList(),
                   ),
                 ),
-                Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                      padding: MaterialStateProperty.all(
-                          const EdgeInsets.symmetric(vertical: 12)),
-                      backgroundColor:
-                          MaterialStateProperty.all(MyColors.primaryOrange),
-                      shape: MaterialStateProperty.all(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(40),
+                cartProvider.carts.length > 0
+                    ? Container(
+                        margin: EdgeInsets.symmetric(horizontal: 20),
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          style: ButtonStyle(
+                            padding: MaterialStateProperty.all(
+                                const EdgeInsets.symmetric(vertical: 12)),
+                            backgroundColor: MaterialStateProperty.all(
+                                MyColors.primaryOrange),
+                            shape: MaterialStateProperty.all(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(40),
+                              ),
+                            ),
+                          ),
+                          onPressed: () {
+                            Navigator.pushNamed(context, "/checkout");
+                          },
+                          child: Text(
+                            'Checkout',
+                            style:
+                                MyStyle.pageTitle.copyWith(color: Colors.white),
+                          ),
                         ),
-                      ),
-                    ),
-                    onPressed: () {
-                      Navigator.pushNamed(context, "/checkout");
-                    },
-                    child: Text(
-                      'Checkout',
-                      style: MyStyle.pageTitle.copyWith(color: Colors.white),
-                    ),
-                  ),
-                )
+                      )
+                    : Container(
+                        margin: const EdgeInsets.only(
+                            top: 100, left: 30, right: 30),
+                        child: Text(
+                          "Keranjang anda kosong\, ayo mulai belanja Sekarang",
+                          style: MyStyle.productCartTitle.copyWith(
+                              fontSize: 20, fontWeight: FontWeight.normal),
+                        ),
+                      )
               ]),
         ),
       ),

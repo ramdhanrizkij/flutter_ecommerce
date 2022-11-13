@@ -275,7 +275,8 @@ class drawerWidget extends StatelessWidget {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
                       child: Image.network(
-                        user.image ?? '',
+                        'https://ui-avatars.com/api/?background=0D8ABC&color=fff&name=' +
+                            user.name!,
                         width: 60,
                         height: 60,
                       ),
@@ -289,11 +290,7 @@ class drawerWidget extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Text(user.firstName ?? ''),
-                          SizedBox(
-                            width: 2,
-                          ),
-                          Text(user.lastName ?? ''),
+                          Text(user.name ?? ''),
                         ],
                       ),
                       Text(user.email ?? '')
@@ -314,10 +311,18 @@ class drawerWidget extends StatelessWidget {
             leading: const Icon(Icons.person),
             title: const Text('Profile'),
             onTap: () {
-              // Update the state of the app
-              // ...
-              // Then close the drawer
-              Navigator.pop(context);
+              Navigator.pushNamed(context, "/profile");
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.logout),
+            title: const Text('Logout'),
+            onTap: () {
+              Provider.of<AuthProvider>(context, listen: false)
+                  .isAuthenticated = false;
+
+              Navigator.of(context).pushNamedAndRemoveUntil(
+                  '/sign-in', (Route<dynamic> route) => false);
             },
           ),
         ],
